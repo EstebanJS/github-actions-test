@@ -1,0 +1,34 @@
+name: "DevOps Master Pipeline"
+
+on:
+  push:
+    branches: [ main, develop ] # Se dispara en ambas ramas
+
+jobs:
+  # 1. CALIDAD (Se corre siempre)
+  quality-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validar Sintaxis de Terraform
+        run: echo "Ejecutando terraform validate..."
+
+  # 2. DESPLIEGUE A DESARROLLO (Solo si es la rama develop)
+  deploy-dev:
+    needs: quality-check
+    if: github.ref == 'refs/heads/develop' # Condición de rama
+    environment: development
+    runs-on: ubuntu-latest
+    steps:
+      - name: Desplegar a DEV
+        run: echo "Desplegando con el Secret de DEV: ${{ secrets.ENV_TOKEN }}"
+
+  # 3. DESPLIEGUE A PRODUCCIÓN (Solo si es la rama main)
+  deploy-prod:
+    needs: quality-check
+    if: github.ref == 'refs/heads/main' # Condición de rama
+    environment: production # Aquí es donde GitHub aplicará la pausa de aprobación
+    runs-on: ubuntu-latest
+    steps:
+      - name: Desplegar a PROD
+        run: echo "Desplegando con el Secret de PROD: ${{ secrets.ENV_TOKEN }}"
