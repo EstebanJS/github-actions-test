@@ -20,9 +20,10 @@ jobs:
     environment: development
     runs-on: ubuntu-latest
     steps:
-      - name: Desplegar a DEV
-        run: |
-          echo "Desplegando con el Secret de DEV: ${{ secrets.ENV_TOKEN }}
+      - name: "Desplegar a DEV"
+        env:
+          MI_TOKEN: ${{ secrets.ENV_TOKEN }}
+        run: echo "Desplegando con el Secret de DEV $MI_TOKEN"
 
   # 3. DESPLIEGUE A PRODUCCIÓN (Solo si es la rama main)
   deploy-prod:
@@ -32,5 +33,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Desplegar a PROD
-        run: |
-          echo "Desplegando con el Secret de PROD: ${{ secrets.ENV_TOKEN }}"
+        env:
+          MI_TOKEN: ${{ secrets.ENV_TOKEN }}
+        run: echo "Desplegando con el Secret de PROD $MI_TOKEN"
