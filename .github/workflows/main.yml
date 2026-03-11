@@ -36,3 +36,5 @@ jobs:
         env:
           MI_TOKEN: ${{ secrets.ENV_TOKEN }}
         run: echo "Desplegando con el Secret de PROD $MI_TOKEN"
+      - name: HelloWorld
+        run: echo "Hello World from GitHub Actions"
